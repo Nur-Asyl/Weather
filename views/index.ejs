@@ -11,6 +11,16 @@
 
     <!-- font awesome -->
     <script src="https://kit.fontawesome.com/8064f71e7b.js" crossorigin="anonymous"></script>
+
+    <style>
+      body {
+          background-image: url('background_weather.jpg'); 
+          background-size: cover;
+          background-position: center;
+          background-repeat: repeat;
+          color: white;
+      }
+  </style>
 </head>
 <body class="vh-100 bg-snow">
   
@@ -18,7 +28,7 @@
   <nav class="navbar bg-info-subtle">
       <div class="container-fluid">
         <a class="navbar-brand ms-5" href="#">
-            <i class="fa-solid fa-scale-balanced"></i>
+          <i class="fa-solid fa-cloud"></i>
           Wheather
         </a>
       </div>
@@ -93,6 +103,31 @@
       </div>
     </div>
   </div>
+
+  <!-- Forecast for 14 daaaaays :) -->
+  <% if (forecastData) { %>
+    <div class="card weather-card mt-3 bg-dark border-5">
+      <div class="card-body">
+        <h2 class="card-title text-center mb-4 text-white">14-Day Forecast for <%= forecastData.resolvedAddress %></h2>
+  
+        <div class="row">
+          <% for (let day of forecastData.days) { %>
+            <div class="col-md-3 text-center mb-4 border-5">
+          
+              <div class="card bg-info-subtle">
+                <div class="card-body">
+                  <h5 class="card-title"><strong>Date:</strong> <%= day.datetime %></h5>
+                  <p class="card-text"><strong>Temperature:</strong> <%= day.temp %> C</p>
+                 
+                </div>
+              </div>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  <% } %>
+  
 
   <!-- Map TODO  -->
   <!-- <div style="width: 100%"><iframe width="100%" height="600" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=Astana+(My%20Business%20Name)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"><a href="https://www.maps.ie/population/">Find Population on Map</a></iframe></div> -->

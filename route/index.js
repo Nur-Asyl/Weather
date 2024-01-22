@@ -1,16 +1,18 @@
 const bodyParser = require('body-parser');
 const express = require('express');
-const app = express();
 const axios = require('axios');
 const path = require('path');
 
+const app = express();
 const OPENWEATHERMAP_API_KEY = '709d0ff50ae9221f8ae9916496ba77cc';
+const VISUAL_CROSSING_API_KEY = '3A5QWCLECANGUPR99GW52YWU9';
 
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, '../views')));
+
+app.use(express.static(path.join(__dirname, '../public')));
 
 app.set('views', path.join(__dirname, '../views'));
-app.set('view engine', 'ejs'); // Set the view engine to EJS
+app.set('view engine', 'ejs');
 
 app.get('/', (req, res) => {
     res.render('index.ejs', { weatherData: null, error: null });
@@ -38,10 +40,17 @@ app.post('/weather', async (req, res) => {
             countryCode: response.data.sys.country,
             rainVolume: response.data.rain ? response.data.rain['1h'] : 0, // Rain volume for the last 3 hours
           };
-        res.render('index.ejs', { weatherData, error: null });
+
+        const visualCrossingResponse = await axios.get(
+            `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${city}?key=${VISUAL_CROSSING_API_KEY}`
+        );
+
+        const forecastData = visualCrossingResponse.data;
+
+        res.render('index.ejs', { weatherData, forecastData, error: null });
     } catch (error) {
         console.error(error);
-        res.render('index.ejs', { weatherData: null, error: 'Error fetching weather data' });
+        res.render('index.ejs', { weatherData: null, forecastData: null, error: 'Error fetching weather data' });
     }
 });
 
