@@ -3,6 +3,7 @@ Node.js app to check the weather today and forecast for 14 days in your city (te
 
 ## Dependencies
 npm install axios express body-parser ejs path
+npm install newsapi
 
 ## Settings
 
@@ -20,5 +21,7 @@ Uses for fetch weather data
 Uses for forecast for 14 days
 ### GoogleMap
 Uses for show your city in the map
+### NewsApi
+For news appropriate by city https://newsapi.org/
 
 
