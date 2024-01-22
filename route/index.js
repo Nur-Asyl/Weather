@@ -18,12 +18,32 @@ app.use(express.static(path.join(__dirname, '../public')));
 app.set('views', path.join(__dirname, '../views'));
 app.set('view engine', 'ejs');
 
-app.get('/', (req, res) => {
-    res.render('index.ejs', { weatherData: null, forecastData: null, newsData: null, error: null });
+const defaultCity = 'Astana';
+
+const defaultWeatherData = {
+    city: defaultCity,
+    
+};
+
+app.get('/', async (req, res) => {
+    try {
+        const response = await axios.post('/weather', { city: defaultCity });
+
+        const { weatherData, forecastData, newsData } = response.data;
+
+        res.render('index.ejs', { weatherData, forecastData, newsData, error: null });
+    } catch (error) {
+        console.error(error);
+        res.render('index.ejs', { weatherData: null, forecastData: null, newsData: null, error: 'Error fetching data' });
+    }
 });
 
 app.post('/weather', async (req, res) => {
-    const city = req.body.city;
+    let city = req.body.city;
+
+    if (city === undefined) {
+        city = "Astana";
+    }
 
     try {
         const response = await axios.get(
